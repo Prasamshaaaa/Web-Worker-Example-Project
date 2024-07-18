@@ -1,0 +1,90 @@
+/* General styles for the table */
+.styled-table {
+  width: 150%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1em;
+  font-family: "Arial", sans-serif;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Table header styles */
+.styled-table thead tr {
+  background-color: #dddddd;
+  color: black;
+  text-align: left;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+/* Table body styles */
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody th {
+  margin-right: 5px;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button container styles */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+/* Button styles */
+.action-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 5px;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
+}
+
+/* For Modal */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

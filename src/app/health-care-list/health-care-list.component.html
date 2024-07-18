@@ -1,0 +1,72 @@
+<div class="button-container">
+  <button class="action-button" (click)="OpenAddColumnDialog()">Add</button>
+  <button class="action-button" (click)="ExportToExcel()">Export</button>
+</div>
+
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Blood Type</th>
+      <th>Medical Condition</th>
+      <th>Date of Admission</th>
+      <th>Doctor</th>
+      <th>Hospital</th>
+      <th>Insurance Provider</th>
+      <th>Billing Amount</th>
+      <th>Room Number</th>
+      <th>Admission Type</th>
+      <th>Discharge Date</th>
+      <th>Medication</th>
+      <th>Test Results</th>
+      <th *ngIf="newColumn">{{ newColumn }}</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="Dataset.length > 0">
+    <tr *ngFor="let row of Dataset">
+      <td>{{ row.Name }}</td>
+      <td>{{ row.Age }}</td>
+      <td>{{ row.Gender }}</td>
+      <td>{{ row["Blood Type"] }}</td>
+      <td>{{ row["Medical Condition"] }}</td>
+      <td>{{ row["Date of Admission"] }}</td>
+      <td>{{ row.Doctor }}</td>
+      <td>{{ row.Hospital }}</td>
+      <td>{{ row["Insurance Provider"] }}</td>
+      <td>{{ row["Billing Amount"] }}</td>
+      <td>{{ row["Room Number"] }}</td>
+      <td>{{ row["Admission Type"] }}</td>
+      <td>{{ row["Discharge Date"] }}</td>
+      <td>{{ row.Medication }}</td>
+      <td>{{ row["Test Results"] }}</td>
+      <td *ngIf="newColumn">{{ row[newColumn] }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal Template -->
+<div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="isModalOpen = false">X</span>
+    <h2>Add New Column</h2>
+    <div style="margin-bottom: 10px">
+      <label for="columnName">Column Name:</label>
+      <input type="text" id="columnName" [(ngModel)]="columnName" />
+    </div>
+
+    <div style="margin-bottom: 10px">
+      <label for="columnValue">Column Value:</label>
+      <input type="text" id="columnValue" [(ngModel)]="columnValue" />
+    </div>
+
+    <button
+      data-bs-dismiss="modal"
+      (click)="ConfirmAdd()"
+      style="margin-left: 90%"
+    >
+      Add
+    </button>
+  </div>
+</div>
