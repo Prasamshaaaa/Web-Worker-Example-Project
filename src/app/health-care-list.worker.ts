@@ -65,6 +65,13 @@ function FetchCsvData(csvUrl: string): Promise<HealthCareData[]> {
     });
 }
 
+/**
+ * @summary Adds a new column with a specified value to each row in the dataset.
+ * @param {HealthCareData[]} dataset - The array of healthcare data objects to which the new column will be added.
+ * @param {string} columnName - The name of the new column to add.
+ * @param {any} columnValue - The value to set for the new column in each row.
+ * @returns {HealthCareData[]} - A new array of healthcare data objects with the added column in each row.
+ */
 function AddNewColumn(dataset: HealthCareData[], columnName: string, columnValue: any): HealthCareData[] {
   return dataset.map(row => {
     const newRow = { ...row }; // Clone the original row
