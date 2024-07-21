@@ -25,3 +25,66 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Table of Contents
+
+- Overview
+- Features
+- Installation
+- Usage
+- Code Snippets
+  - HealthCareListComponent
+  - HealthCareList Worker
+  - ExcelExport Worker
+
+## Overview
+
+This project is built using Angular and utilizes web workers to handle CPU-intensive tasks such as fetching and parsing CSV data, adding new columns to datasets, and exporting data to Excel files.
+
+## Features
+
+- Fetch and parse healthcare data from CSV files.
+- Add new columns to the dataset.
+- Export data to Excel files.
+- Efficient background processing using web workers.
+
+
+## Installation
+
+### Prerequisites
+
+- Node.js and npm installed.
+- Angular CLI installed globally.
+
+### Steps
+
+1. Clone the repository:
+   
+    git clone https://github.com/Prasamshaaaa/Web-Worker-Example-Project.git
+   
+
+2. Install dependencies:
+
+    npm install
+
+
+3. Serve the application:
+    ng serve
+
+4. Open your browser and navigate to 'http://localhost:4200'.
+   
+
+
+ ## Usage
+
+### CSV Data Fetching and Parsing
+
+The worker responsible for fetching and parsing CSV data is defined in the file `src/app/health-care-list.worker.ts`.
+
+### Adding New Columns
+
+Columns can be added to the dataset using the HealthCareListComponent.
+
+### Exporting to Excel
+
+Data can be exported to Excel using the `excel-export.worker.ts`.
