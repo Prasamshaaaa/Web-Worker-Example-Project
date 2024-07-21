@@ -21,7 +21,6 @@
       <th>Discharge Date</th>
       <th>Medication</th>
       <th>Test Results</th>
-      <th *ngIf="newColumn">{{ newColumn }}</th>
     </tr>
   </thead>
   <tbody *ngIf="Dataset.length > 0">
@@ -41,7 +40,6 @@
       <td>{{ row["Discharge Date"] }}</td>
       <td>{{ row.Medication }}</td>
       <td>{{ row["Test Results"] }}</td>
-      <td *ngIf="newColumn">{{ row[newColumn] }}</td>
     </tr>
   </tbody>
 </table>

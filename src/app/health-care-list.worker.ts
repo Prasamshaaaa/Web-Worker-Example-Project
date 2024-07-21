@@ -2,32 +2,69 @@ import { HealthCareData } from "./Models/health-care-class";
 
 addEventListener('message', ({ data }) => {
   if (typeof data === 'string') {
-
-    const csvData = data;
-    const rows = csvData.split('\n');
-    const headers = rows[0].split(',').map((header: string) => header.trim());
-
-    const result = rows.slice(1).map((row: string) => {
-      const values = row.split(',').map((value: string) => value.trim());
-      const obj = headers.reduce((acc: { [key: string]: string }, header: string, index: number) => {
-        acc[header] = values[index];
-        return acc;
-      }, {});
-      return obj;
-    });
-
-    postMessage({ result, headers });
-  }
-  else if (data.dataset && data.columnName && data.columnValue) {
-    console.log('Adding column:', data.columnName, 'with value:', data.columnValue); // Log column addition
-
-    // Adding a new column
-    const updatedDataset = data.dataset.map((row: HealthCareData) => {
-      row[data.columnName] = data.columnValue; // Add the new column with the specified value
-      return row;
-    });
-
-    postMessage({ result: updatedDataset });
+    /**
+   * @summary Handle CSV data fetching and parsing
+   * @param data - URL of the CSV file to be fetched and parsed
+   */
+    FetchCsvData(data)
+      .then(parsedData => postMessage({ type: 'csvData', payload: parsedData }))
+      .catch(error => postMessage({ type: 'error', payload: 'Failed to fetch or parse CSV' }));
+  } else if (data.dataset && data.columnName && data.columnValue !== undefined) {
+    // Handle adding new column to dataset
+    const updatedDataset = AddNewColumn(data.dataset, data.columnName, data.columnValue);
+    postMessage({ type: 'updatedDataset', payload: updatedDataset });
   }
 });
 
+
+/**
+ * @summary Fetch and parse CSV data from a given URL
+ * @param csvUrl - URL of the CSV file to be fetched
+ * @returns Promise<HealthCareData[]> - Parsed healthcare data from the CSV file
+ */
+function FetchCsvData(csvUrl: string): Promise<HealthCareData[]> {
+  return fetch(csvUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch CSV');
+      }
+      return response.text();
+    })
+    .then(csvData => {
+      const rows = csvData.split('\n');
+      const headers = rows[0].split(',').map(header => header.trim());
+
+      return rows.slice(1).map(row => {
+        const values = row.split(',').map(value => value.trim());
+        const rowData: HealthCareData = {
+          Name: "",
+          Age: 0,
+          Gender: "",
+          "Blood Type": "",
+          "Medical Condition": "",
+          "Date of Admission": "",
+          Doctor: "",
+          Hospital: "",
+          "Insurance Provider": "",
+          "Billing Amount": 0,
+          "Room Number": "",
+          "Admission Type": "",
+          "Discharge Date": "",
+          Medication: "",
+          "Test Results": ""
+        };
+        headers.forEach((header, index) => {
+          rowData[header] = values[index];
+        });
+        return rowData;
+      });
+    });
+}
+
+function AddNewColumn(dataset: HealthCareData[], columnName: string, columnValue: any): HealthCareData[] {
+  return dataset.map(row => {
+    const newRow = { ...row }; // Clone the original row
+    newRow[columnName] = columnValue;
+    return newRow;
+  });
+}

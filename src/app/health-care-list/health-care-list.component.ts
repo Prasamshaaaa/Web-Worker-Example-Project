@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HealthCareData } from '../Models/health-care-class';
 
@@ -7,8 +7,14 @@ import { HealthCareData } from '../Models/health-care-class';
   templateUrl: './health-care-list.component.html',
   styleUrls: ['./health-care-list.component.css']
 })
-export class HealthCareListComponent implements OnInit {
-  Dataset: HealthCareData[] = []; // Original dataset
+export class HealthCareListComponent implements OnInit, OnDestroy {
+
+  /**
+   *  @summary - Dataset to hold healthcare data 
+   
+  */
+
+  Dataset: HealthCareData[] = [];
 
   private Worker!: Worker;
   private ExcelExportWorker!: Worker;
@@ -16,7 +22,6 @@ export class HealthCareListComponent implements OnInit {
   isModalOpen: boolean = false;
   columnName: string = '';
   columnValue: string = '';
-  newColumn: string = '';
 
   constructor(private http: HttpClient) { }
 
@@ -25,69 +30,66 @@ export class HealthCareListComponent implements OnInit {
     this.LoadDataset();
   }
 
-  InitializeWorkers() {
-    // Initialize the worker for other operations if needed
+  ngOnDestroy(): void {
+    // Clean up workers when component is destroyed
+    if (this.Worker) {
+      this.Worker.terminate();
+    }
+    if (this.ExcelExportWorker) {
+      this.ExcelExportWorker.terminate();
+    }
+  }
 
-    // Initialize the Excel export worker
+  InitializeWorkers() {
+    /**
+     *  @summary - Initialize ExcelExportWorker for exporting data to Excel
+     *  */
+
     this.ExcelExportWorker = new Worker(new URL('../excel-export.worker', import.meta.url));
 
+    /** @summary Listen for messages from the ExcelExportWorker */
     this.ExcelExportWorker.onmessage = ({ data }: MessageEvent) => {
       if (data.type === 'excelExported') {
         const { excelBuffer, fileName } = data.payload;
         this.saveExcelFile(excelBuffer, fileName);
       }
     };
+
+    this.ExcelExportWorker.onerror = (error) => {
+      console.error('Error in ExcelExportWorker:', error);
+    };
   }
 
   LoadDataset() {
-    this.http.get('assets/healthcare_dataset.csv', { responseType: 'text' }).subscribe(
-      data => {
-        const rows = data.split('\n');
-        const headers = rows[0].split(',').map(header => header.trim());
-        this.Dataset = rows.slice(1).map(row => {
-          const values = row.split(',').map(value => value.trim());
-          const rowData: HealthCareData = {
-            Name: '',
-            Age: 0,
-            Gender: '',
-            'Blood Type': '',
-            'Medical Condition': '',
-            'Date of Admission': '',
-            Doctor: '',
-            Hospital: '',
-            'Insurance Provider': '',
-            'Billing Amount': 0,
-            'Room Number': '',
-            'Admission Type': '',
-            'Discharge Date': '',
-            Medication: '',
-            'Test Results': ''
-          };
-          headers.forEach((header, index) => {
-            rowData[header] = values[index];
-          });
-          return rowData;
-        });
-      },
-      error => {
-        console.error('Error loading CSV:', error);
-      }
-    );
-  }
+    /** @summary Initialize Worker for loading data */
+    this.Worker = new Worker(new URL('../health-care-list.worker', import.meta.url));
 
+    const csvUrl = 'assets/healthcare_dataset.csv';
+    this.Worker.postMessage(csvUrl); // Sending CSV URL to worker for processing
+
+    // Listen for messages from the Worker
+    this.Worker.onmessage = ({ data }: MessageEvent) => {
+      if (data.type === 'csvData') {
+        this.Dataset = data.payload; // Update the dataset with fetched data
+      } else if (data.type === 'error') {
+        console.error('Error fetching or parsing CSV:', data.payload);
+      } else {
+        console.warn('Unexpected message received from healthcare-list worker:', data);
+      }
+    };
+  }
 
   OpenAddColumnDialog() {
     this.isModalOpen = true;
   }
 
+  /** @summary Function to confirm and add a new column to the dataset */
   ConfirmAdd() {
     if (this.columnName && this.columnValue) {
       // Adding new column to dataset
       this.Dataset.forEach(row => {
         row[this.columnName] = this.columnValue;
       });
-      // Sending message to the Excel export worker
-      this.ExcelExportWorker.postMessage({ type: 'exportToExcel', dataset: this.Dataset });
       // Clearing inputs and close modal
       this.columnName = '';
       this.columnValue = '';
@@ -95,11 +97,22 @@ export class HealthCareListComponent implements OnInit {
     }
   }
 
+
   ExportToExcel() {
     const fileName = `healthcare_data_${new Date().toLocaleDateString()}.xlsx`;
-    this.ExcelExportWorker.postMessage({ type: 'exportToExcel', dataset: this.Dataset, fileName });
+    if (this.ExcelExportWorker) {
+      this.ExcelExportWorker.postMessage({ type: 'exportToExcel', dataset: this.Dataset, fileName });
+    } else {
+      console.error('ExcelExportWorker is not initialized.');
+    }
   }
 
+
+  /**
+   * @summary Function to save the exported Excel file to the client's system
+   * @param buffer - The buffer containing the Excel file data
+   * @param fileName - The name of the file to save
+   */
   private saveExcelFile(buffer: any, fileName: string) {
     const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
     const url: string = window.URL.createObjectURL(data);
