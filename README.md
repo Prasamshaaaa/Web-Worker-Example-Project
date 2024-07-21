@@ -1,7 +1,7 @@
 # MyProject
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.11.
-This project is a healthcare data management application built using Angular and TypeScript. It allows users to load, manipulate, and export healthcare data from a CSV file. The application includes features like adding new columns, paginating data, and exporting the dataset to an Excel file.
+
 
 ## Development server
 
@@ -29,7 +29,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 
-##Table of Contents
+## Table of Contents
       Features
       Technologies
       Setup and Installation
@@ -38,13 +38,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
       License
 
 
-##Features
+## Features
       Load Dataset: Load large datasets from a CSV file in chunks.
       Add Columns: Add new columns to the dataset dynamically.
       Pagination: Navigate through the dataset using pagination controls.
       Export to Excel: Export the current chunk of the dataset to an Excel file.      
       
-##Technologies
+## Technologies
     Angular
     TypeScript
     Web Workers
@@ -52,10 +52,10 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
     CSS
 
     
-##Setup and Installation
+## Setup and Installation
 Follow these steps to set up and run the project locally.
 
-#Prerequisites
+# Prerequisites
     Node.js (v12 or higher)
     Angular CLI (v10 or higher)
 
@@ -63,32 +63,33 @@ Follow these steps to set up and run the project locally.
 HealthCare Data Management Application
 This project is a healthcare data management application built using Angular and TypeScript. It allows users to load, manipulate, and export healthcare data from a CSV file. The application includes features like adding new columns, paginating data, and exporting the dataset to an Excel file.
 
-Table of Contents
+## Table of Contents
 Features
 Technologies
 Setup and Installation
 Usage
-Project Structure
-License
-Features
+
+## Features
 Load Dataset: Load large datasets from a CSV file in chunks.
 Add Columns: Add new columns to the dataset dynamically.
 Pagination: Navigate through the dataset using pagination controls.
 Export to Excel: Export the current chunk of the dataset to an Excel file.
-Technologies
+
+## Technologies
 Angular
 TypeScript
 Web Workers
 HTML
 CSS
-Setup and Installation
+
+## Setup and Installation
 Follow these steps to set up and run the project locally.
 
-Prerequisites
+# Prerequisites
 Node.js (v12 or higher)
 Angular CLI (v10 or higher)
 
-#Installation 
+# Installation 
 1. Clone the repository:
      git clone
 2. Install dependencies:
@@ -97,15 +98,15 @@ Angular CLI (v10 or higher)
    ng serve
 4. Open your browser and navigate to http://localhost:4200.
 
-##Usage
-#Loading Dataset
+## Usage
+# Loading Dataset
 The dataset is automatically loaded from a CSV file located at assets/healthcare_dataset.csv.
 Data is loaded in chunks of 1000 rows by default.
-#Adding a Column
+# Adding a Column
 Click on the "Add Column" button to open the modal dialog.
 Enter the column name and value, then click "Add" to add the new column to the dataset.
-#Pagination
+# Pagination
 Use the "Previous" and "Next" buttons to navigate through the pages of the dataset.
-#Exporting to Excel
+# Exporting to Excel
 Click on the "Export to Excel" button to download the current chunk of data as an Excel file.
    
