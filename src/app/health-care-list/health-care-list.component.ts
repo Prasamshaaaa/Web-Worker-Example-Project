@@ -202,7 +202,7 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @summary  Updates the data for the current page based on pagination settings.
+   * @summary - Updates the data for the current page based on pagination settings.
    */
   UpdatePaginatedData() {
     if (!this.isRequestPending) {
