@@ -42,10 +42,10 @@ This project is a healthcare data management application built using Angular and
 
 
 ## Features
-      Load Dataset: Load large datasets from a CSV file in chunks.
-      Add Columns: Add new columns to the dataset dynamically.
-      Pagination: Navigate through the dataset using pagination controls.
-      Export to Excel: Export the current chunk of the dataset to an Excel file.      
+      1. Load Dataset: Load large datasets from a CSV file in chunks.
+      2. Add Columns: Add new columns to the dataset dynamically.
+      3. Pagination: Navigate through the dataset using pagination controls.
+      4. Export to Excel: Export the current chunk of the dataset to an Excel file.      
       
 ## Technologies
     Angular
@@ -72,7 +72,7 @@ CSS
 
 ## Installation 
 1. Clone the repository:
-     git clone
+     git clone https://github.com/Prasamshaaaa/Web-Worker-Example-Project.git
 2. Install dependencies:
      npm install
 3. Start the development server:
