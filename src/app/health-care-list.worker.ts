@@ -21,6 +21,10 @@ addEventListener('message', ({ data }) => {
  * @summary Fetch and parse CSV data from a given URL
  * @param csvUrl - URL of the CSV file to be fetched
  * @returns Promise<HealthCareData[]> - Parsed healthcare data from the CSV file
+ *  This function performs an HTTP request to fetch CSV data from the provided URL.
+ * It then processes the CSV data to convert it into an array of HealthCareData objects.
+ * If the request or processing fails, it throws an error.
+ * If successful, it returns the parsed healthcare data as a promise, which can be used by the calling function to handle the data.
  */
 function FetchCsvData(csvUrl: string): Promise<HealthCareData[]> {
   return fetch(csvUrl)
