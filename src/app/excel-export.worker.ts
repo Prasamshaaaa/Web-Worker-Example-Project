@@ -1,33 +1,36 @@
-/// <reference lib="webworker" />
 import * as XLSX from 'xlsx';
+import { HealthCareData } from './Models/health-care-class';
 
-addEventListener('message', ({ data }) => {
-    switch (data.type) {
-        case 'exportToExcel': {
-            /**
-            * @summary Handle exporting dataset to Excel
-            * @param {Object} data - The data sent from the main thread
-            * @param {any[]} data.dataset - The dataset to export to Excel
-            * @param {string} data.fileName - The name of the Excel file to be generated
-            */
-            const { dataset, fileName } = data;
-            const excelBuffer = exportToExcel(dataset);
-            postMessage({ type: 'excelExported', payload: { excelBuffer, fileName } });
-            break;
-        }
-        default:
-            console.error('Unknown message type received in Excel export worker:', data);
-    }
-});
+// Global variable to hold dataset
+let Dataset: HealthCareData[] = [];
 
 /**
- * @summary Export dataset to an Excel file buffer
- * @param {any[]} dataset - The dataset to export
- * @returns {any} - The buffer containing the Excel file data
+ * @summary - Handles messages received from the main thread.
+ * @param {MessageEvent} event - The message event containing data sent to the worker.
  */
-function exportToExcel(dataset: any[]): any {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataset);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Healthcare Data');
-    return XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-}
+addEventListener('message', ({ data }: MessageEvent) => {
+    if (data.type === 'exportToExcel') {
+        // Handles the request to export the dataset to an Excel file.
+        const { dataset, fileName } = data;
+
+        if (!dataset || dataset.length === 0) {
+            console.error('No dataset provided or dataset is empty.');
+            return;
+        }
+
+        // Convert dataset to Excel worksheet
+        const worksheet = XLSX.utils.json_to_sheet(dataset);
+        // Create a new workbook
+        const workbook = XLSX.utils.book_new();
+        // Append worksheet to the workbook
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        // Write workbook to an array buffer
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+        // Sending the Excel file buffer and file name back to the main thread
+        postMessage({ type: 'excelExported', payload: { excelBuffer, fileName } });
+    } else if (data.type === 'loadDataset') {
+        // Handling the request to load the dataset.
+        Dataset = data.dataset; // Storing the dataset in the global variable
+    }
+});

@@ -23,6 +23,7 @@
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
+    "ngx-pagination": "^6.0.3",
     "papaparse": "^5.4.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

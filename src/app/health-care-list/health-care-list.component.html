@@ -1,6 +1,10 @@
 <div class="button-container">
-  <button class="action-button" (click)="OpenAddColumnDialog()">Add</button>
-  <button class="action-button" (click)="ExportToExcel()">Export</button>
+  <button class="action-button" (click)="OpenAddColumnDialog()">
+    Add Column
+  </button>
+  <button class="action-button" (click)="ExportToExcel()">
+    Export to Excel
+  </button>
 </div>
 
 <table class="styled-table">
@@ -23,8 +27,8 @@
       <th>Test Results</th>
     </tr>
   </thead>
-  <tbody *ngIf="Dataset.length > 0">
-    <tr *ngFor="let row of Dataset">
+  <tbody *ngIf="PaginatedDataset.length > 0">
+    <tr *ngFor="let row of PaginatedDataset">
       <td>{{ row.Name }}</td>
       <td>{{ row.Age }}</td>
       <td>{{ row.Gender }}</td>
@@ -44,6 +48,24 @@
   </tbody>
 </table>
 
+<div class="pagination-controls">
+  <button
+    (click)="ChangePage(Page - 1)"
+    [disabled]="Page === 1"
+    class="pagination-button"
+  >
+    Previous
+  </button>
+  <span class="pagination-info">Page {{ Page }} of {{ TotalPages }}</span>
+  <button
+    (click)="ChangePage(Page + 1)"
+    [disabled]="Page === TotalPages"
+    class="pagination-button"
+  >
+    Next
+  </button>
+</div>
+
 <!-- Modal Template -->
 <div *ngIf="isModalOpen" class="modal">
   <div class="modal-content">
@@ -59,12 +81,6 @@
       <input type="text" id="columnValue" [(ngModel)]="columnValue" />
     </div>
 
-    <button
-      data-bs-dismiss="modal"
-      (click)="ConfirmAdd()"
-      style="margin-left: 90%"
-    >
-      Add
-    </button>
+    <button (click)="ConfirmAdd()" style="margin-left: 90%">Add</button>
   </div>
 </div>
