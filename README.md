@@ -28,6 +28,9 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 
+ 
+HealthCare Data Management Application
+This project is a healthcare data management application built using Angular and TypeScript. It allows users to load, manipulate, and export healthcare data from a CSV file. The application includes features like adding new columns, paginating data, and exporting the dataset to an Excel file.
 
 ## Table of Contents
       Features
@@ -52,28 +55,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
     CSS
 
     
-## Setup and Installation
+# Setup and Installation
 Follow these steps to set up and run the project locally.
 
-# Prerequisites
-    Node.js (v12 or higher)
-    Angular CLI (v10 or higher)
+## Prerequisites
+   1. Node.js (v12 or higher)
+   2. Angular CLI (v10 or higher)
 
- 
-HealthCare Data Management Application
-This project is a healthcare data management application built using Angular and TypeScript. It allows users to load, manipulate, and export healthcare data from a CSV file. The application includes features like adding new columns, paginating data, and exporting the dataset to an Excel file.
-
-## Table of Contents
-Features
-Technologies
-Setup and Installation
-Usage
-
-## Features
-Load Dataset: Load large datasets from a CSV file in chunks.
-Add Columns: Add new columns to the dataset dynamically.
-Pagination: Navigate through the dataset using pagination controls.
-Export to Excel: Export the current chunk of the dataset to an Excel file.
 
 ## Technologies
 Angular
@@ -82,14 +70,7 @@ Web Workers
 HTML
 CSS
 
-## Setup and Installation
-Follow these steps to set up and run the project locally.
-
-# Prerequisites
-Node.js (v12 or higher)
-Angular CLI (v10 or higher)
-
-# Installation 
+## Installation 
 1. Clone the repository:
      git clone
 2. Install dependencies:
@@ -98,15 +79,15 @@ Angular CLI (v10 or higher)
    ng serve
 4. Open your browser and navigate to http://localhost:4200.
 
-## Usage
-# Loading Dataset
+# Usage
+## Loading Dataset
 The dataset is automatically loaded from a CSV file located at assets/healthcare_dataset.csv.
 Data is loaded in chunks of 1000 rows by default.
-# Adding a Column
+## Adding a Column
 Click on the "Add Column" button to open the modal dialog.
 Enter the column name and value, then click "Add" to add the new column to the dataset.
-# Pagination
+## Pagination
 Use the "Previous" and "Next" buttons to navigate through the pages of the dataset.
-# Exporting to Excel
+## Exporting to Excel
 Click on the "Export to Excel" button to download the current chunk of data as an Excel file.
    
