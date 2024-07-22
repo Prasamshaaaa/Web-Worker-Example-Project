@@ -74,6 +74,8 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
 
       if (data.type === 'csvData') {
         this.CurrentChunk = data.payload.chunk; // Update current chunk
+        this.Dataset = [...this.Dataset, ...this.CurrentChunk]; // Append the new chunk to the Dataset
+
         this.TotalItems = data.payload.totalItems; // Update total items count
         console.log('Dataset loaded:', this.CurrentChunk); // Debugging
 
