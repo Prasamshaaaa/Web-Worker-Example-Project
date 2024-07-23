@@ -10,7 +10,8 @@ import { ProcessorAComponent } from './processor-a/processor-a.component';
 import { ProcessorBComponent } from './processor-b/processor-b.component';
 import { ProcessorCComponent } from './processor-c/processor-c.component';
 import { HealthCareListComponent } from './health-care-list/health-care-list.component';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule } from '@angular/forms';
+import { SpreadsheetAllModule } from '@syncfusion/ej2-angular-spreadsheet';
 
 @NgModule({
   declarations: [
@@ -19,14 +20,14 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
     ProcessorBComponent,
     ProcessorCComponent,
     HealthCareListComponent,
-
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    SpreadsheetAllModule
   ],
   providers: [],
   bootstrap: [AppComponent]

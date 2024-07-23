@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-processor-c',
   templateUrl: './processor-c.component.html',
-  styleUrls: ['./processor-c.component.css']
+  styleUrls: ['./processor-c.component.css',
+
+  ]
 })
 export class ProcessorCComponent implements OnInit {
   private Worker!: Worker; //property to hold the instance of the web worker

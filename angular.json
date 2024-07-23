@@ -17,6 +17,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+        "lodash"
+     ],
             "outputPath": "dist/my-project",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -28,8 +31,11 @@
             ],
             "styles": [
               "src/styles.css"
+              
             ],
-            "scripts": [],
+            "scripts": [
+
+            ],
             "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
@@ -95,9 +101,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+
             ],
-            "scripts": [],
+            "scripts": [
+
+            ],
             "webWorkerTsConfig": "tsconfig.worker.json"
           }
         }

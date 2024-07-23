@@ -1,13 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HealthCareData } from '../Models/health-care-class';
+import jspreadsheet from 'jspreadsheet';
+import 'jspreadsheet/dist/jspreadsheet.css';
+import 'jsuites/dist/jsuites.css';
 
 @Component({
   selector: 'app-health-care-list',
   templateUrl: './health-care-list.component.html',
   styleUrls: ['./health-care-list.component.css']
 })
-export class HealthCareListComponent implements OnInit, OnDestroy {
+export class HealthCareListComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild("spreadsheet") spreadsheet!: ElementRef; // Reference to the JSpreadsheet container
+  @ViewChild("log") log!: ElementRef; // Reference to the textarea for logging data
+  Worksheets!: jspreadsheet.worksheetInstance[];
+
 
   Dataset: HealthCareData[] = []; // Array to store the entire dataset
   PaginatedDataset: HealthCareData[] = []; // Array to store the dataset for the current page
@@ -31,17 +38,18 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
   private FullDataset: HealthCareData[] = []; // Array to store the complete dataset
   private allDataLoaded: boolean = false; // Flag to check if all data is loaded
 
-  /**
-   * @summary - Initializes the component, sets up workers, and loads the dataset.
-   */
   ngOnInit(): void {
     this.InitializeWorkers(); // Initialize workers for handling tasks
     this.LoadDataset(); // Load the dataset from the server
   }
 
-  /**
-   * @summary - Cleans up resources when the component is destroyed.
-   */
+  ngAfterViewInit(): void {
+    jspreadsheet.setLicense('ZjBhZGVhOWRlYzQwYzE0NzVmY2E3NWUzMGE2YTI4YmZmZGRiOWU1MWRiZmI4ZjllMzE4M2VjMDc4YTAwZjVlMzYxNWQ0YmExZTU3YjBiNmUzNGZhZTMwMTY0NTAzYzRhMzJhYzYwZTIzMGIyYTRhMTQ2YTQ4MTY5ZGMxZWY4MDYsZXlKamJHbGxiblJKWkNJNklqTTFObUV4T1RKaU56a3hNMkl3TkdNMU5EVTNOR1F4T0dNeU9HUTBObVUyTXprMU5ESTRZV0lpTENKdVlXMWxJam9pU25Od2NtVmhaSE5vWldWMElpd2laR0YwWlNJNk1UYzBOVGsyTnpZd01Dd2laRzl0WVdsdUlqcGJJbXB6YUdWc2JDNXVaWFFpTENKamMySXVZWEJ3SWl3aWFuTndjbVZoWkhOb1pXVjBMbU52YlNJc0luVmxMbU52YlM1aWNpSXNJbU5rY0c0dWFXOGlMQ0pwYm5SeVlYTm9aV1YwY3k1amIyMGlMQ0pxYzNCeVpXRmtjMmhsWlhRdFpHVjJMV1ZrTG1SbGRtVnNiM0F1YkdsbmFIUnVhVzVuTG1admNtTmxMbU52YlNJc0luTjBZV05yWW14cGRIb3VZMjl0SWl3aWQyVmlZMjl1ZEdGcGJtVnlMbWx2SWl3aWMyaGxaWFJ6TG5ObVkyOWtaV0p2ZEM1amIyMGlMQ0p6YUdWbGRITmxkUzV6Wm1OdlpHVmliM1F1WTI5dElpd2lkMlZpSWl3aWJHOWpZV3hvYjNOMElsMHNJbkJzWVc0aU9pSXpOQ0lzSW5OamIzQmxJanBiSW5ZM0lpd2lkamdpTENKMk9TSXNJbll4TUNJc0luWXhNU0lzSW1admNtMXpJaXdpWm05eWJYVnNZU0lzSW5KbGJtUmxjaUlzSW5CaGNuTmxjaUlzSW1sdGNHOXlkR1Z5SWl3aWRtRnNhV1JoZEdsdmJuTWlMQ0pqYjIxdFpXNTBjeUlzSW5ObFlYSmphQ0lzSW1Ob1lYSjBjeUlzSW5CeWFXNTBJaXdpWW1GeUlpd2ljMmhsWlhSeklpd2ljMmhoY0dWeklpd2ljMlZ5ZG1WeUlpd2labTl5YldGMElpd2lhVzUwY21GemFHVmxkSE1pWFgwPQ==');
+
+    // Initialize the spreadsheet after the view has been initialized
+    this.InitializeSpreadsheet();
+  }
+
   ngOnDestroy(): void {
     if (this.Worker) {
       this.Worker.terminate(); // Terminate the health care worker
@@ -51,9 +59,6 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Initializes web workers for handling CSV data and Excel export operations.
-   */
   InitializeWorkers() {
     // Initialize Excel export worker
     this.ExcelExportWorker = new Worker(new URL('../excel-export.worker', import.meta.url));
@@ -81,6 +86,7 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
 
         this.UpdateTotalPages(); // Update total pages for pagination
         this.UpdatePaginatedData(); // Update data for the current page
+        this.InitializeSpreadsheet(); // Initialize the spreadsheet with paginated data
       } else if (data.type === 'updatedDataset') {
         this.Dataset = data.payload; // Update dataset with new column
         console.log('Dataset after column addition:', this.Dataset); // Debugging
@@ -100,9 +106,6 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     };
   }
 
-  /**
-   * @summary - Sends a request to the worker to load the dataset from the CSV file.
-   */
   LoadDataset() {
     const csvUrl = 'assets/healthcare_dataset.csv'; // URL of the CSV file
     this.Worker.postMessage({
@@ -113,16 +116,10 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * @summary - Opens the dialog for adding a new column to the dataset.
-   */
   OpenAddColumnDialog() {
     this.isModalOpen = true; // Set modal visibility to true
   }
 
-  /**
-   * @summary - Confirms and adds a new column to the dataset.
-   */
   ConfirmAdd() {
     console.log('Dataset before adding column:', this.Dataset); // Debugging
 
@@ -143,9 +140,6 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * @summary - Exports the current chunk of data to an Excel file.
-   */
   ExportToExcel() {
     const fileName = `healthcare_data_${new Date().toLocaleDateString()}.xlsx`; // Generate file name
     if (this.ExcelExportWorker) {
@@ -161,11 +155,6 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * @summary - Saves the exported Excel file to the user's device.
-   * @param {any} buffer - The file buffer.
-   * @param {string} fileName - The name of the file.
-   */
   private SaveExcelFile(buffer: any, fileName: string) {
     const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
     const url: string = window.URL.createObjectURL(data); // Create URL for the Blob
@@ -177,10 +166,6 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     anchor.remove(); // Remove anchor element
   }
 
-  /**
-   *  @summary - Changes the current page and loads the appropriate dataset chunk.
-   * @param {number} newPage - The new page number.
-   */
   ChangePage(newPage: number) {
     if (newPage > 0 && newPage <= this.TotalPages && !this.isRequestPending) {
       const requiredChunkIndex = Math.floor((newPage - 1) * this.ItemsPerPage / this.ChunkSize);
@@ -192,20 +177,15 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
       } else {
         this.Page = newPage; // Update page number
         this.UpdatePaginatedData(); // Update paginated data
+        this.InitializeSpreadsheet(); // Reinitialize the spreadsheet with paginated data
       }
     }
   }
 
-  /**
-   *  @summary - Updates the total number of pages based on the total number of items and items per page.
-   */
   private UpdateTotalPages() {
     this.TotalPages = Math.ceil(this.TotalItems / this.ItemsPerPage); // Calculate total pages
   }
 
-  /**
-   * @summary - Updates the data for the current page based on pagination settings.
-   */
   UpdatePaginatedData() {
     if (!this.isRequestPending) {
       this.isRequestPending = true; // Set request pending flag
@@ -216,4 +196,74 @@ export class HealthCareListComponent implements OnInit, OnDestroy {
     }
   }
 
+  InitializeSpreadsheet() {
+    const container = this.spreadsheet.nativeElement;
+
+    if (container) {
+      // COnverting PaginatedDatasete to an array of arrays for JSpreadsheet
+      const data = this.PaginatedDataset.map(item => [
+        item['Name'] || '',
+        item['Age'] || '',
+        item['Gender'] || '',
+        item['Blood Type'] || '',
+        item['Medical Condition'] || '',
+        item['Date of Admission'] || '',
+        item['Doctor'] || '',
+        item['Hospital'] || '',
+        item['Insurance Provider'] || '',
+        item['Billing Amount'] || '',
+        item['Room Number'] || '',
+        item['Admission Type'] || '',
+        item['Discharge Date'] || '',
+        item['Medication'] || '',
+        item['Test Results'] || ''
+      ]);
+
+      if (this.Worksheets && this.Worksheets.length > 0) {
+        // Update existing worksheet data
+        this.Worksheets[0].setData(data);
+      } else {
+        // Initialize new spreadsheet
+        this.Worksheets = jspreadsheet(container, {
+          tabs: true,
+          toolbar: true,
+
+          worksheets: [{
+            data: data,  // Data to be populated in the spreadsheet
+            minDimensions: [15, 50],
+            worksheetName: 'Health Care List',
+            defaultColWidth: 124, // Default column width
+            columnResize: true,
+
+            columns: [
+              {
+                type: 'text', title: 'Name', width: 100,
+                render: "square"
+              },
+              { type: 'number', title: 'Age' },
+              { type: 'text', title: 'Gender' },
+              { type: 'text', title: 'Blood Type' },
+              { type: 'text', title: 'Medical Condition' },
+              { type: 'text', title: 'Date of Admission' },
+              { type: 'text', title: 'Doctor' },
+              { type: 'text', title: 'Hospital' },
+              { type: 'text', title: 'Insurance Provider' },
+              { type: 'number', title: 'Billing Amount' },
+              { type: 'text', title: 'Room Number' },
+              { type: 'text', title: 'Admission Type' },
+              { type: 'text', title: 'Discharge Date' },
+              { type: 'text', title: 'Medication' },
+              { type: 'text', title: 'Test Results' }
+            ],
+          }]
+        });
+      }
+    } else {
+      console.error('Spreadsheet container is not available.'); // Handle case where container is not available
+    }
+  }
+
+  addLog() {
+    this.log.nativeElement.value = JSON.stringify(this.PaginatedDataset);
+  }
 }

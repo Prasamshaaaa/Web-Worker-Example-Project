@@ -127,3 +127,7 @@
   font-size: 16px;
   margin: 0 10px;
 }
+
+#spreadsheet {
+  width: 100%;
+}

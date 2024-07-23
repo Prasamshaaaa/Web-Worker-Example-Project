@@ -20,9 +20,16 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@jspreadsheet/render": "^5.4.0",
+    "@syncfusion/ej2-angular-spreadsheet": "^26.1.42",
     "file-saver": "^2.0.5",
+    "jquery": "^3.7.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
+    "jspreadsheet": "^11.4.5",
+    "jspreadsheet-ce": "^4.2.1",
+    "jsuites": "^5.4.6",
     "ngx-pagination": "^6.0.3",
     "papaparse": "^5.4.1",
     "rxjs": "~7.5.0",
@@ -45,6 +52,6 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.6.2"
+    "typescript": "^4.6.4"
   }
 }
