@@ -2,6 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.11.
 
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
@@ -26,65 +27,67 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
+
+ 
+HealthCare Data Management Application
+This project is a healthcare data management application built using Angular and TypeScript. It allows users to load, manipulate, and export healthcare data from a CSV file. The application includes features like adding new columns, paginating data, and exporting the dataset to an Excel file.
+
 ## Table of Contents
+      Features
+      Technologies
+      Setup and Installation
+      Usage
+      Project Structure
+      License
 
-- Overview
-- Features
-- Installation
-- Usage
-- Code Snippets
-  - HealthCareListComponent
-  - HealthCareList Worker
-  - ExcelExport Worker
-
-## Overview
-
-This project is built using Angular and utilizes web workers to handle CPU-intensive tasks such as fetching and parsing CSV data, adding new columns to datasets, and exporting data to Excel files.
 
 ## Features
+      1. Load Dataset: Load large datasets from a CSV file in chunks.
+      2. Add Columns: Add new columns to the dataset dynamically.
+      3. Pagination: Navigate through the dataset using pagination controls.
+      4. Export to Excel: Export the current chunk of the dataset to an Excel file.      
+      
+## Technologies
+    Angular
+    TypeScript
+    Web Workers
+    HTML
+    CSS
 
-- Fetch and parse healthcare data from CSV files.
-- Add new columns to the dataset.
-- Export data to Excel files.
-- Efficient background processing using web workers.
+    
+# Setup and Installation
+Follow these steps to set up and run the project locally.
+
+## Prerequisites
+   1. Node.js (v12 or higher)
+   2. Angular CLI (v10 or higher)
 
 
-## Installation
+## Technologies
+Angular
+TypeScript
+Web Workers
+HTML
+CSS
 
-### Prerequisites
-
-- Node.js and npm installed.
-- Angular CLI installed globally.
-
-### Steps
-
+## Installation 
 1. Clone the repository:
-   
-    git clone https://github.com/Prasamshaaaa/Web-Worker-Example-Project.git
-   
-
+     git clone https://github.com/Prasamshaaaa/Web-Worker-Example-Project.git
 2. Install dependencies:
+     npm install
+3. Start the development server:
+   ng serve
+4. Open your browser and navigate to http://localhost:4200.
 
-    npm install
-
-
-3. Serve the application:
-    ng serve
-
-4. Open your browser and navigate to 'http://localhost:4200'.
+# Usage
+## Loading Dataset
+The dataset is automatically loaded from a CSV file located at assets/healthcare_dataset.csv.
+Data is loaded in chunks of 1000 rows by default.
+## Adding a Column
+Click on the "Add Column" button to open the modal dialog.
+Enter the column name and value, then click "Add" to add the new column to the dataset.
+## Pagination
+Use the "Previous" and "Next" buttons to navigate through the pages of the dataset.
+## Exporting to Excel
+Click on the "Export to Excel" button to download the current chunk of data as an Excel file.
    
-
-
- ## Usage
-
-### CSV Data Fetching and Parsing
-
-The worker responsible for fetching and parsing CSV data is defined in the file `src/app/health-care-list.worker.ts`.
-
-### Adding New Columns
-
-Columns can be added to the dataset using the HealthCareListComponent.
-
-### Exporting to Excel
-
-Data can be exported to Excel using the `excel-export.worker.ts`.
