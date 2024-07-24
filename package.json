@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
+    "@jspreadsheet/parser": "^5.4.0",
     "@jspreadsheet/render": "^5.4.0",
     "@syncfusion/ej2-angular-spreadsheet": "^26.1.42",
     "file-saver": "^2.0.5",

@@ -1,7 +1,4 @@
 <div class="button-container">
-  <button class="action-button" (click)="OpenAddColumnDialog()">
-    Add Column
-  </button>
   <button class="action-button" (click)="ExportToExcel()">
     Export to Excel
   </button>
@@ -47,11 +44,15 @@
     </tr>
   </tbody>
 </table> -->
-<ul>
-  <li class="insertcolumnatend" (click)="InsertColumn()">
-    Insert a new blank column at the end of the table
-  </li>
-</ul>
+<input #file type="file" name="file" style="display: none" />
+<input
+  type="button"
+  value="Load a XLSX file from my local computer"
+  (click)="this.file.click()"
+/>
+<button class="insertcolumnatend" (click)="InsertColumn()">
+  Insert new column
+</button>
 <div #spreadsheet style="width: 100%"></div>
 <!-- <textarea #log></textarea>
 <input
@@ -76,23 +77,4 @@
   >
     Next
   </button>
-</div>
-
-<!-- Modal Template -->
-<div *ngIf="isModalOpen" class="modal">
-  <div class="modal-content">
-    <span class="close" (click)="isModalOpen = false">X</span>
-    <h2>Add New Column</h2>
-    <div style="margin-bottom: 10px">
-      <label for="columnName">Column Name:</label>
-      <input type="text" id="columnName" [(ngModel)]="columnName" />
-    </div>
-
-    <div style="margin-bottom: 10px">
-      <label for="columnValue">Column Value:</label>
-      <input type="text" id="columnValue" [(ngModel)]="columnValue" />
-    </div>
-
-    <button (click)="ConfirmAdd()" style="margin-left: 90%">Add</button>
-  </div>
 </div>
