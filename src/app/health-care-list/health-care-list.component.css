@@ -131,3 +131,18 @@
 #spreadsheet {
   width: 100%;
 }
+
+.insertcolumnatend {
+  list-style: none;
+  padding: 5px 10px;
+  color: black;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  border: 1 px solid black;
+  display: flex;
+  justify-content: flex-end;
+  justify-items: flex-end;
+}

@@ -8,6 +8,8 @@ import 'jsuites/dist/jsuites.css';
   selector: 'app-health-care-list',
   templateUrl: './health-care-list.component.html',
   styleUrls: ['./health-care-list.component.css']
+
+
 })
 export class HealthCareListComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -234,6 +236,8 @@ export class HealthCareListComponent implements OnInit, OnDestroy, AfterViewInit
             worksheetName: 'Health Care List',
             defaultColWidth: 124, // Default column width
             columnResize: true,
+            allowInsertColumn: true,
+            allowManualInsertColumn: true,
 
             columns: [
               {
@@ -255,7 +259,8 @@ export class HealthCareListComponent implements OnInit, OnDestroy, AfterViewInit
               { type: 'text', title: 'Medication' },
               { type: 'text', title: 'Test Results' }
             ],
-          }]
+          }],
+
         });
       }
     } else {
@@ -265,5 +270,12 @@ export class HealthCareListComponent implements OnInit, OnDestroy, AfterViewInit
 
   addLog() {
     this.log.nativeElement.value = JSON.stringify(this.PaginatedDataset);
+  }
+
+  InsertColumn(numColumns: number = 1, position: number = -1, insertBefore: boolean = false) {
+    const worksheet = this.Worksheets[0];
+    if (worksheet) {
+      worksheet.insertColumn(numColumns, position, insertBefore);
+    }
   }
 }
